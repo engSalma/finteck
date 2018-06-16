@@ -8,9 +8,9 @@ import java.util.List;
 import org.springframework.web.client.RestTemplate;
  
 
-public class SpringBootRestTestClient {
+public class BlackListIPSTestClient {
  
-    public static final String REST_SERVICE_URI = "http://localhost:8080/blacklistIps/api";
+    public static final String REST_SERVICE_URI = "http://localhost:8090/blacklistIps/api/blacklistIP/";
     static List<String> Addedlistips ;
 	static List<String> deletedListIps;
     static{
@@ -31,7 +31,7 @@ public class SpringBootRestTestClient {
         System.out.println("Testing listAllIps API-----------");
          
         RestTemplate restTemplate = new RestTemplate();
-        List<LinkedHashMap<String, String>> blackListIps = restTemplate.getForObject(REST_SERVICE_URI+"/blacklistIP/", List.class);
+        List<LinkedHashMap<String, String>> blackListIps = restTemplate.getForObject(REST_SERVICE_URI, List.class);
          
         if(blackListIps!=null){
                 System.out.println("black list ips = "+blackListIps);;
@@ -45,7 +45,7 @@ public class SpringBootRestTestClient {
     private static void getIpAddress(){
         System.out.println("Testing get IP API----------");
         RestTemplate restTemplate = new RestTemplate();
-        String ip = restTemplate.getForObject(REST_SERVICE_URI+"/blacklistIP/196.192.112.115", String.class);
+        String ip = restTemplate.getForObject(REST_SERVICE_URI+"196.192.112.115/", String.class);
         System.out.println(ip);
     }
     
@@ -53,7 +53,7 @@ public class SpringBootRestTestClient {
     private static void checkIPAddress(){
         System.out.println("Testing get IP API----------");
         RestTemplate restTemplate = new RestTemplate();
-        Boolean isBlackList = restTemplate.getForObject(REST_SERVICE_URI+"/blacklistIP/isBlackListIp/196.192.112.115", Boolean.class);
+        String isBlackList = restTemplate.getForObject(REST_SERVICE_URI+"isBlackListIp/196.192.112.115/",String.class);
         System.out.println(isBlackList);
     }
      
@@ -61,7 +61,7 @@ public class SpringBootRestTestClient {
     private static void AddBlackListIP() {
         System.out.println("Testing Adding BlackList API----------");
         RestTemplate restTemplate = new RestTemplate();
-        URI uri = restTemplate.postForLocation(REST_SERVICE_URI+"/blacklistIP/","196.192.112.115", String.class);
+        URI uri = restTemplate.postForLocation(REST_SERVICE_URI,"196.192.112.115");
         System.out.println("Location : "+uri.toASCIIString());
     }
  
@@ -69,7 +69,7 @@ public class SpringBootRestTestClient {
     private static void AddBlackListIPs() {
         System.out.println("Testing Add batch of blackListIps API----------");
         RestTemplate restTemplate = new RestTemplate();
-        URI uri = restTemplate.postForLocation(REST_SERVICE_URI+"/blacklistIP/addBlackListIps/", Addedlistips, String.class);
+        URI uri = restTemplate.postForLocation(REST_SERVICE_URI+"addBlackListIps/", Addedlistips);
         System.out.println("Location : "+uri.toASCIIString());
     }
  
@@ -77,7 +77,7 @@ public class SpringBootRestTestClient {
     private static void deleteIp() {
         System.out.println("Testing delete User API----------");
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.delete(REST_SERVICE_URI+"/blacklistIP/196.192.112.115");
+        restTemplate.delete(REST_SERVICE_URI+"196.192.112.115/");
     }
  
  
@@ -85,11 +85,12 @@ public class SpringBootRestTestClient {
     private static void deletelistIps() {
         System.out.println("Testing all delete Users API----------");
         RestTemplate restTemplate = new RestTemplate();
-		restTemplate.delete(REST_SERVICE_URI + "/blacklistIP/deleteblackListIps/");
+        restTemplate.postForLocation(REST_SERVICE_URI+"deleteblackListIps/", deletedListIps);
     }
  
     public static void main(String args[]){
-       listAllIps();
+       listAllIps(); 
+       AddBlackListIP();
        AddBlackListIPs();
        checkIPAddress();
        deleteIp();

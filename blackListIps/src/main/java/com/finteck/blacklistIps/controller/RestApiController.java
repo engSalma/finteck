@@ -42,24 +42,25 @@ public class RestApiController {
 	// -------------------get blackListIp------------------------------------------
 
 	@RequestMapping(value = "/blacklistIP/{ip}", method = RequestMethod.GET)
-	public ResponseEntity<Boolean> getIpAddress(@PathVariable("ip") String ip) {
+	public ResponseEntity<String> getIpAddress(@PathVariable("ip") String ip) {
 		logger.info("check ip ", ip);
-		boolean isBlackListIP = blackListConnectionService.isBlacklistIP(ip);
-		return new ResponseEntity<Boolean>(isBlackListIP, HttpStatus.OK);
+		 blackListConnectionService.getExistIP(ip);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
 	// -------------------checkIPAddress against blackListIps------------------------------------------
 
 	@RequestMapping(value = "/blacklistIP/isBlackListIp/{ip}", method = RequestMethod.GET)
-	public ResponseEntity<Boolean> isBlackListIp(@PathVariable("ip") String ip) {
+	public ResponseEntity<String> isBlackListIp(@PathVariable("ip") String ip) {
 		logger.info("check ip ", ip);
-		boolean isBlackListIP = blackListConnectionService.isBlacklistIP(ip);
-		return new ResponseEntity<Boolean>(isBlackListIP, HttpStatus.OK);
+		Boolean isBlackListIP = blackListConnectionService.isBlacklistIP(ip);
+		String responsre = "ip =" + ip +" isBlackListIP =" + isBlackListIP;
+		return new ResponseEntity<String>(responsre, HttpStatus.OK);
 	}
 
 	// -------------------Add blacklist IP-------------------------------------------
 
-	@RequestMapping(value = "/blacklistIP/add", method = RequestMethod.POST)
+	@RequestMapping(value = "/blacklistIP", method = RequestMethod.POST)
 	public ResponseEntity<?> addBlackListIp(@RequestBody String ip, UriComponentsBuilder ucBuilder) {
 		logger.info("Add to blacklist ip : ", ip);
 
@@ -76,20 +77,20 @@ public class RestApiController {
 
 	// ------------------- Add list of blacklistIps -----------------------------
 
-	@RequestMapping(value = "/blacklistIP/addBlackListIps", method = RequestMethod.POST)
-	public ResponseEntity<?> addBlackListIps(@PathVariable("ips") List<String> ips, UriComponentsBuilder ucBuilder) {
+	@RequestMapping(value = "/blacklistIP/addBlackListIps/", method = RequestMethod.POST)
+	public ResponseEntity<?> addBlackListIps(@RequestBody List<String> ips, UriComponentsBuilder ucBuilder) {
 		logger.info("Adding list of blacklist ips" + ips);
 		blackListConnectionService.AddBlacklistIps(ips);
 		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(ucBuilder.path("/api/blacklistIP").buildAndExpand().toUri());
-		return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+		headers.setLocation(ucBuilder.path("/api/blacklistIP/").buildAndExpand().toUri());
+		return new ResponseEntity<Set<String>>(headers, HttpStatus.CREATED);
 
 	}
 
 	// ------------------- Delete blackList IP-----------------------------------------
 
-	@RequestMapping(value = "/blacklistIP/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<?> deleteIp(@PathVariable("ip") String ip) {
+	@RequestMapping(value = "/blacklistIP/{ip}", method = RequestMethod.DELETE)
+	public ResponseEntity<?> deleteIP(@PathVariable("ip") String ip) {
 		logger.info("Fetching & Deleting Black list Ip ", ip);
 
 		if (blackListConnectionService.getExistIP(ip)==null) {
@@ -102,8 +103,8 @@ public class RestApiController {
 
 	// ------------------- Delete list of blacklistIps -----------------------------
 
-	@RequestMapping(value = "/blacklistIP/deleteblackListIps", method = RequestMethod.DELETE)
-	public ResponseEntity<?> deleteblackListIps(@PathVariable("ips") List<String> ips) {
+	@RequestMapping(value = "/blacklistIP/deleteblackListIps/", method = RequestMethod.POST)
+	public ResponseEntity<?> deleteblackListIps(@RequestBody List<String> ips, UriComponentsBuilder ucBuilder) {
 		logger.info("Deleting list of blacklist ips" + ips);
 		blackListConnectionService.deleteBlacklistIps(ips);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);

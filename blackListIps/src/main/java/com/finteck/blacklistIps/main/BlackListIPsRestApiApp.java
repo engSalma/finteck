@@ -5,9 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication(scanBasePackages={"com.finteck.blacklistIps"})// same as @Configuration @EnableAutoConfiguration @ComponentScan combined
-public class SpringBootRestApiApp {
+public class BlackListIPsRestApiApp {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SpringBootRestApiApp.class, args);
+		SpringApplication.run(BlackListIPsRestApiApp.class, args);
 	}
 }
