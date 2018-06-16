@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service;
 public class BlackListIpsManagerImpl implements BlackListManager {
 
 	public static final Logger logger = LoggerFactory.getLogger(BlackListIpsManagerImpl.class);
-
+    /**
+     * using HashMap for fast Retrieving if the search process is continues and have a large amount of data
+     */
 	private HashMap<String, String> blackListIPs;
 
 	@Override
