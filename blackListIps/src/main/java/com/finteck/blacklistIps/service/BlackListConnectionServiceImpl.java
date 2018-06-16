@@ -69,4 +69,12 @@ public class BlackListConnectionServiceImpl implements BlackListConnectionServic
 		return isBlackListIp;
 	}
 
+	@Override
+	public void deleteAll() {
+		logger.info("Starting deleting All ips");
+		blackListIpsManagerImpl.getBlackListIPs().clear();
+		logger.info("Finish deleting All Ips");
+
+	}
+
 }

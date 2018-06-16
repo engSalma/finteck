@@ -44,7 +44,7 @@ public class RestApiController {
 	@RequestMapping(value = "/blacklistIP/{ip}", method = RequestMethod.GET)
 	public ResponseEntity<String> getIpAddress(@PathVariable("ip") String ip) {
 		logger.info("check ip ", ip);
-		 blackListConnectionService.getExistIP(ip);
+		blackListConnectionService.getExistIP(ip);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
@@ -54,7 +54,7 @@ public class RestApiController {
 	public ResponseEntity<String> isBlackListIp(@PathVariable("ip") String ip) {
 		logger.info("check ip ", ip);
 		Boolean isBlackListIP = blackListConnectionService.isBlacklistIP(ip);
-		String responsre = "ip =" + ip +" isBlackListIP =" + isBlackListIP;
+		String responsre = "ip =" + ip + " isBlackListIP =" + isBlackListIP;
 		return new ResponseEntity<String>(responsre, HttpStatus.OK);
 	}
 
@@ -93,11 +93,20 @@ public class RestApiController {
 	public ResponseEntity<?> deleteIP(@PathVariable("ip") String ip) {
 		logger.info("Fetching & Deleting Black list Ip ", ip);
 
-		if (blackListConnectionService.getExistIP(ip)==null) {
+		if (blackListConnectionService.getExistIP(ip) == null) {
 			logger.error("Unable to delete. ip , {} not found.", ip);
 			return new ResponseEntity(new CustomErrorType("Unable to delete. ip , " + ip + " not found."), HttpStatus.NOT_FOUND);
 		}
 		blackListConnectionService.deleteBlacklistIp(ip);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+
+	// ------------------- Delete blackList IP-----------------------------------------
+
+	@RequestMapping(value = "/blacklistIP", method = RequestMethod.DELETE)
+	public ResponseEntity<?> deleteAll() {
+		logger.info("delete All blackList Ips ");
+		blackListConnectionService.deleteAll();
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 

@@ -13,6 +13,8 @@ public interface BlackListConnectionService {
 	
 	public void deleteBlacklistIps(List<String> ipsAddresses);
 	
+	public void deleteAll();
+	
 	public Set<String> getBlacklistIps();
 	
 	public String getExistIP(String ip) ;
